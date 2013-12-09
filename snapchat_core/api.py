@@ -135,6 +135,9 @@ class SnapchatSession():
         result = SnapchatSession._post_or_fail(constants.SEND_RESOURCE
                                                , params)
 
+    def get_snaps(self, predicate=lambda snap: snap.viewable):
+        return filter(predicate, self.snaps)
+
 
     #
     # PRIVATE UTILITY METHODS
@@ -238,3 +241,45 @@ class SnapchatSession():
                 raise Exception("Unknown snap, no sender or receiver")            
         self.snaps = [_build_appropriate_snap_obj(snap)
                       for snap in json_update[SNAPS]]
+
+
+class SfsSession(SnapchatSession):
+    @staticmethod
+    def _generate_sfs_id(filename):
+        """
+	Produces an ID for a file stored in Snapchat FS. ID consists of a
+        prefix, the
+	filename, and a unique identifier based on file data.
+	@filename Name of the file as it exists on the filesystem.
+	@file_data The data inside the file.
+	"""
+        with open(filename) as f:
+            file_data = f.read()
+	sha = hashlib.sha256()
+	sha.update(file_data)
+	content_id = sha.hexdigest()
+	return "snapchatfs-%s-%s" % (filename, content_id)
+
+    @staticmethod
+    def _is_sfs_id(id):
+	"""
+	Returns True if `id` is a valid Snapchat FS file identifier.
+	@id The identifier to test.
+	"""
+	return id.startswith('snapchatfs-')
+
+    def _parse_sfs_id(self, id):
+	"""
+	Parses an identifier for a file in Snapchat FS. Returns the
+        filename and a hash of
+	the contents of the file.
+	@id The Snapchat FS identifier to parse.
+	"""
+	assert(SfsSession._is_sfs_id(id))
+	# valid ids are of the form
+        # """snapchat-[filename]-[hash of content][username]"""
+	prefix = id[:11]                     # 'snapchat-'
+	filename = id[11:-76]                # filename
+	content_id = id[-75:-len(self.username)]  # hash of content
+	return filename, content_id
+

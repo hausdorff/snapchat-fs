@@ -1,8 +1,13 @@
+
 # Introduction
 
-Snapchat FS is a simple command line utility that allows you to copy
-arbitrary files into Snapchat, and retrieve them at any other computer with
-the utility installed on it.
+Since Snapchat imposes few restrictions on what data can be uploaded (i.e.,
+not just images), I've taken to using it as a system to send files to
+myself and others.
+
+Snapchat FS is the tool that allows this. It provides a simple command line
+interface for uploading arbitrary files into Snapchat, managing them, and
+downloading them to any other computer with access to this package.
 
 Uploading the file is simple:
 
@@ -23,8 +28,9 @@ currently maintained in Snapchat using the Snapchat FS utility:
 
 ```
 $ sfs list
-some_file.pdf [hash]
-cow.mov [hash]
+Filename      Content hash
+some_file.pdf fc7f9f7fd935c8f341f492862c1fe3978d5d1cabbe7a9374325bccd1e1fdd7df
+cow.mov       1a55ff534e03d25b5a489da83c2ae32ad9bc70fc6e07df4e7b0e82f028cb531f
 ```
 
 

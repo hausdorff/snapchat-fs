@@ -6,7 +6,7 @@ downloading arbitrary data files from Snapchat.
 """
 
 import hashlib
-from snapchat_core import SnapchatSession
+from snapchat_core import *
 
 __author__ = "Alex Clemmer, Chad Brubaker"
 __copyright__ = "Copyright 2013, Alex Clemmer and Chad Brubaker"
@@ -19,19 +19,25 @@ __email__ = "clemmer.alexander@gmail.com"
 __status__ = "Prototype"
 
 
-def generate_sfs_id(filename):
-	"""
-	Produces an ID for a file stored in Snapchat FS. ID consists of a prefix, the
-	filename, and a unique identifier based on file data.
-	@filename Name of the file as it exists on the filesystem.
-	@file_data The data inside the file.
-	"""
-        with open(filename) as f:
-            file_data = f.read()
-	sha = hashlib.sha256()
-	sha.update(file_data)
-	content_id = sha.hexdigest()
-	return "snapchatfs-%s-%s" % (filename, content_id)
+def list_all_sfs_files(username, password):
+    ss = SfsSession(username, password)
+    ss.login()
+
+    filenames_seen_so_far = set()
+    content_seen_so_far = set()
+    print '%s\t%s' % ('\033[1mFilename\033[0m'
+                      , '\033[1mContent hash\033[0m')
+    for snap in ss.get_snaps(lambda snap: isinstance(snap, SentSnap)
+                             and SfsSession._is_sfs_id(snap.client_id)):
+        filename, content_hash = ss._parse_sfs_id(snap.client_id)
+
+        if (filename in filenames_seen_so_far) \
+           and (content_hash in content_seen_so_far):
+            continue
+        else:
+            print '%s\t%s' % (filename, content_hash)
+            filenames_seen_so_far.add(filename)
+            content_seen_so_far.add(content_hash)
 
 
 if __name__ == '__main__':
