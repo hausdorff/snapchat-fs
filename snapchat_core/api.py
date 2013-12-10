@@ -50,9 +50,10 @@ class SnapchatSession():
     """
 
     def __init__(self, username, password):
-        self.username = username
-        self.password = password
-        self.session_token = None
+        self.username = username  # string
+        self.password = password  # string
+        self.session_token = None # string
+        self.snaps = None         # [Snap()]
 
     #
     # PUBLIC FACING API METHODS
@@ -135,8 +136,15 @@ class SnapchatSession():
         result = SnapchatSession._post_or_fail(constants.SEND_RESOURCE
                                                , params)
 
-    def get_snaps(self, predicate=lambda snap: snap.viewable):
-        return filter(predicate, self.snaps)
+    def get_snaps(self, filter_func=lambda snap: True):
+        """
+        Returns array of Snaps sent to current user, represented as a list
+        of Snap objects.
+        @filter_func Filter function for snaps; takes a Snap object as
+            input, returns `False` if we are to filter the Snap from our
+            collection.
+        """
+        return filter(filter_func, self.snaps)
 
 
     #

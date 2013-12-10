@@ -29,8 +29,8 @@ currently maintained in Snapchat using the Snapchat FS utility:
 ```
 $ sfs list
 Filename      Content hash
-some_file.pdf fc7f9f7fd935c8f341f492862c1fe3978d5d1cabbe7a9374325bccd1e1fdd7df
-cow.mov       1a55ff534e03d25b5a489da83c2ae32ad9bc70fc6e07df4e7b0e82f028cb531f
+some_file.pdf fc7f9f7fd935c8f34...7df
+cow.mov       1a55ff534e03d25b5...31f
 ```
 
 
