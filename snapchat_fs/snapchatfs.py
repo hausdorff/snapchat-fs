@@ -19,6 +19,16 @@ __email__ = "clemmer.alexander@gmail.com"
 __status__ = "Prototype"
 
 
+def bold(text):
+    return '\033[1m%s\033[0m' % text
+
+def sent_id_to_received_id(id):
+    """
+    Sent IDs have an 's' at the end, while received IDs have an 'r' on the
+    end. This method strips 's' off and replaces it with an 'r'.
+    """
+    return id[:-1] + 'r'
+
 def download_all_sfs(username, password):
     ss = SfsSession(username, password)
     ss.login()
@@ -40,23 +50,6 @@ def download_all_sfs(username, password):
             filenames_seen_so_far.add(filename)
             content_seen_so_far.add(content_hash)
 
-def bold(text):
-    return '\033[1m%s\033[0m' % text
-
-def sent_id_to_received_id(id):
-    """
-    Sent IDs have an 's' at the end, while received IDs have an 'r' on the
-    end. This method strips 's' off and replaces it with an 'r'.
-    """
-    return id[:-1] + 'r'
-
-def list_all_downloadable(username, password):
-    ss = SfsSession(username, password)
-    ss.login()
-    snaps = ss.get_snaps()
-    for snap in filter(lambda snap: snap.viewable, snaps):
-        print snap.id
-
 def all_downloadable_sfs_files(username, password):
     ss = SfsSession(username, password)
     ss.login()
@@ -69,10 +62,12 @@ def all_downloadable_sfs_files(username, password):
     snaps_sent = ss.get_snaps(lambda snap: isinstance(snap, SentSnap)
                               and SfsSession._is_sfs_id(snap.client_id))
 
-    # for deduping
+    # for deduping -- a file is a duplicate if its content and its name
+    # are the same
     filenames_seen_so_far = set()
     content_seen_so_far = set()
 
+    # grab all "unique" files stored in Snapchat FS
     sfs_files = []
     for snap in snaps_sent:
         filename, content_hash = ss._parse_sfs_id(snap.client_id)
