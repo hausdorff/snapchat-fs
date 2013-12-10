@@ -90,14 +90,3 @@ def list_all_downloadable_sfs_files(username, password):
     for filename, content_hash, received_id, snap in files:
         print '%s\t%s...%s' % (filename, content_hash[:17]
                                , content_hash[-3:])
-
-
-if __name__ == '__main__':
-    # TODO: FILL IN YOUR CREDENTIALS HERE.
-    #ss = SnapchatSession('', '')
-    ss.login()
-    filename = 'file.txt'
-    sfs_id = generate_sfs_id(filename)
-    ss.upload_image(filename, sfs_id)
-    ss.send_image_to('abecedarius', sfs_id)
-
