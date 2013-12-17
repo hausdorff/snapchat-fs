@@ -13,14 +13,15 @@ Uploading the file is simple:
 
 ```
 $ sfs upload some_file.pdf
-some_file.pdf successfully uploaded
+Uploading file some_file.pdf
 ```
 
 Downloading is just as simple:
 
 ```
-$ sfs download some_file.pdf
-some_file.pdf successfully downloaded
+$ sfs download directory_to_put_files
+Downloading snap file.txt
+Downloading snap file.txt but filename is not unique; downloading as: file.txt-1a55ff534e03d25b5a489da83c2ae32ad9bc70fc6e07df4e7b0e82f028cb531f
 ```
 
 Snapchat FS supports many other features, such as listing the files
