@@ -1,3 +1,5 @@
+VERSION = 'Snapchat FS 0.1'
+
 ROOT_URL = "https://feelinsonice-hrd.appspot.com"
 # appened to the ROOT_URL to get the login resource
 LOGIN_RESOURCE = "/bq/login"

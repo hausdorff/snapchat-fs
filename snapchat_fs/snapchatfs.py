@@ -22,6 +22,12 @@ __status__ = "Prototype"
 def bold(text):
     return '\033[1m%s\033[0m' % text
 
+def green(text):
+    return '\033[1;32m%s\033[0m' % text
+
+def red(text):
+    return '\033[1;31m%s\033[0m' % text
+
 def sent_id_to_received_id(id):
     """
     Sent IDs have an 's' at the end, while received IDs have an 'r' on the
@@ -38,11 +44,14 @@ def download_all_sfs(username, password, target_dir):
         try:
             data = snap.download()
             if filename not in filenames_downloaded:
-                print("Downloading snap %s" % filename)
+                
+                print(green("Downloading snap ") + "%s" % filename)
                 path = os.path.join(target_dir, filename)
             else:
-                print("Non-unique filename: downloading snap %s as %s" %
-                      (filename, filename + "-" + content_hash))
+                print(green("Downloading snap ") + ("%s " % filename) +
+                      (red("but filename is not unique; ") +
+                       ("downloading as: %s" %
+                        (filename + "-" + content_hash))))
                 path = os.path.join(target_dir
                                     , filename + "-" + content_hash)
 
@@ -98,3 +107,11 @@ def list_all_downloadable_sfs_files(username, password):
     for filename, content_hash, received_id, snap in files:
         print '%s\t%s...%s' % (filename, content_hash[:17]
                                , content_hash[-3:])
+
+def upload_sfs_file(username, password, filename):
+    print green('Uploading file ') + (filename)
+    ss = SfsSession(username, password)
+    ss.login()
+    sfs_id = ss.generate_sfs_id(filename)
+    ss.upload_image(filename, sfs_id)
+    ss.send_image_to(username, sfs_id)

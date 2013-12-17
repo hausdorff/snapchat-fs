@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+"""Snapchat FS
+
+Usage:
+  sfs list
+  sfs download all <target_directory>
+  sfs upload <file> ...
+  sfs (-h | --help)
+  sfs (-v | --version)
+
+Options:
+  -h --help        Show this screen
+  -v --version     Show the version
+"""
+from docopt import docopt
+import os, sys
+from snapchat_core import constants
+from snapchat_fs import *
+
+__author__ = "Alex Clemmer, Chad Brubaker"
+__copyright__ = "Copyright 2013, Alex Clemmer and Chad Brubaker"
+__credits__ = ["Alex Clemmer", "Chad Brubaker"]
+
+__license__ = "MIT"
+__version__ = "0.1"
+__maintainer__ = "Alex Clemmer"
+__email__ = "clemmer.alexander@gmail.com"
+__status__ = "Prototype"
+
+
+USERNAME=None
+PASSWORD=None
+
+
+def create_dir_if_not_exists(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+def cli(arguments):
+    if arguments['list']:
+        list_all_downloadable_sfs_files(USERNAME, PASSWORD)
+    if arguments['download'] and arguments['all']:
+        directory = arguments['<target_directory>']
+        create_dir_if_not_exists(directory)
+        download_all_sfs(USERNAME, PASSWORD, directory)
+    if arguments['upload']:
+        for filename in arguments['<file>']:
+            upload_sfs_file(USERNAME, PASSWORD, filename)
+
+def main():
+    if USERNAME == None or PASSWORD == None:
+        print 'Before using Snapchat FS, you must fill in the USERNAME and ' + \
+                'PASSWORD variables in the `sfs` file!'
+        sys.exit(1)
+    else:
+        arguments = docopt(__doc__, version=constants.VERSION)
+        cli(arguments)
+
+if __name__ == '__main__':
+    main()
