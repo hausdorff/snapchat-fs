@@ -3,6 +3,7 @@ ROOT_URL = "https://feelinsonice-hrd.appspot.com"
 LOGIN_RESOURCE = "/bq/login"
 SEND_RESOURCE = "/bq/send"
 UPLOAD_RESOURCE = "/bq/upload"
+BLOB_RESOURCE = "/bq/blob"
 
 # we pass this token to the service to "authenticate" that we're supposed
 # to be able to log in

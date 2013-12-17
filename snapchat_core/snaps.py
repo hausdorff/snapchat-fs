@@ -6,6 +6,7 @@ received, sent, and so on. Methods in these classes encapsulate actions
 that are useful to perform on snaps.
 """
 
+import time
 from Crypto.Cipher import AES
 
 __author__ = "Alex Clemmer, Chad Brubaker"
@@ -70,25 +71,7 @@ class Snap():
         if not self.viewable:
             raise Exception("Snap not viewable, cannot download")
 
-        if when is None:
-            when = str(int(time.time() * 100))
-
-        params = {'id' : self.id, 'timestamp' : when, 'username' : self.connection.username}
-        result = self.connection.send_req("/bq/blob", params, when).content
-        if skip_decrypt:
-            return result
-        # test if result is unencrypted
-        if result[:3] == '\x00\x00\x00' and results[5:12] == '\x66\x74\x79\x70\x33\x67\x70\x35':
-            return result
-        elif result[:3] == '\xFF\xD8\xFF':
-            return result
-
-        # otherwise encrypted, decrypt it.
-        crypt = AES.new(self.encryption_key, AES.MODE_ECB)
-        result = bytes(crypt.decrypt(result))
-        # remove padding
-        result = result[:-ord(result[-1])]
-        return result
+        return self.connection.blob(self.id)
 
     def __repr__(self):
         return "%s(%r)" % (self.__class__, self.__dict__)

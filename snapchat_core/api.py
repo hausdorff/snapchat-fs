@@ -25,6 +25,7 @@ __status__ = "Prototype"
 # API. If they change, we only need to update these variables.
 AUTH_TOKEN             = 'auth_token'
 CAN_SEE_CUSTOM_STORIES = 'can_see_custom_stories'
+CLIENT_ID              = 'id'
 COUNTRY_CODE           = 'country_code'
 DISPLAY                = 'display'
 FRIENDS                = 'friends'
@@ -146,6 +147,32 @@ class SnapchatSession():
         """
         return filter(filter_func, self.snaps)
 
+    def blob(self, client_id):
+        timestamp = SnapchatSession._generate_timestamp()
+        params = {
+              USERNAME  : self.username
+            , TIMESTAMP : timestamp
+            , CLIENT_ID : client_id
+            , REQ_TOKEN : SnapchatSession._generate_req_token(
+                self.session_token, timestamp)
+        }
+
+        result = SnapchatSession._post_or_fail(constants.BLOB_RESOURCE
+                                               , params).content
+        
+        if result[:3] == '\x00\x00\x00' \
+           and results[5:12] == '\x66\x74\x79\x70\x33\x67\x70\x35':
+            return result
+        elif result[:3] == '\xFF\xD8\xFF':
+            return result
+
+        # otherwise encrypted, decrypt it.
+        crypt = AES.new(constants.SECRET_KEY, AES.MODE_ECB)
+        result = bytes(crypt.decrypt(result))
+        # remove padding
+        result = result[:-ord(result[-1])]
+        return result
+
 
     #
     # PRIVATE UTILITY METHODS
@@ -253,7 +280,7 @@ class SnapchatSession():
 
 class SfsSession(SnapchatSession):
     @staticmethod
-    def _generate_sfs_id(filename):
+    def generate_sfs_id(filename):
         """
 	Produces an ID for a file stored in Snapchat FS. ID consists of a
         prefix, the
@@ -269,21 +296,21 @@ class SfsSession(SnapchatSession):
 	return "snapchatfs-%s-%s" % (filename, content_id)
 
     @staticmethod
-    def _is_sfs_id(id):
+    def is_sfs_id(id):
 	"""
 	Returns True if `id` is a valid Snapchat FS file identifier.
 	@id The identifier to test.
 	"""
 	return id.startswith('snapchatfs-')
 
-    def _parse_sfs_id(self, id):
+    def parse_sfs_id(self, id):
 	"""
 	Parses an identifier for a file in Snapchat FS. Returns the
         filename and a hash of
 	the contents of the file.
 	@id The Snapchat FS identifier to parse.
 	"""
-	assert(SfsSession._is_sfs_id(id))
+	assert(SfsSession.is_sfs_id(id))
 	# valid ids are of the form
         # """snapchat-[filename]-[hash of content][username]"""
 	prefix = id[:11]                     # 'snapchat-'
