@@ -60,7 +60,7 @@ Please enter your password (NOTE: STORED IN PLAINTEXT):
 
 ```
 
-The `sfs` config file looks something like this:
+The `sfs` config file will then look something like this:
 
 ```
 USERNAME=bobby_murphy
