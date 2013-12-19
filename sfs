@@ -13,7 +13,7 @@ Options:
   -v --version     Show the version
 """
 from docopt import docopt
-import os, sys
+import os, getpass, sys
 from snapchat_core import constants
 from snapchat_fs import *
 
@@ -28,33 +28,108 @@ __email__ = "clemmer.alexander@gmail.com"
 __status__ = "Prototype"
 
 
-USERNAME=None
-PASSWORD=None
+SETTINGS = {}
+USERNAME = 'USERNAME'
+PASSWORD = 'PASSWORD'
+
+
+def initialize_user():
+    """
+    Initializes user if we can't find the config file (which is
+    ~/.snapchat_fs).
+
+    This usually involves asking for username and password, building the
+    config file, and writing these values to the file.
+    """
+    # Welcome message
+    print "Looks like you haven't used Snapchat FS before."
+    print "We're going to ask for a username and a password; you can"
+    print "change these later by messing with the file %s" % \
+            constants.CONFIG_FILE_PATH
+
+    # get username/password
+    print "Please enter a username:"
+    username = raw_input()
+    print "Please enter your password (NOTE: STORED IN PLAINTEXT):"
+    password = getpass.getpass('')
+
+    # write username/password to file
+    with open(constants.CONFIG_FILE_PATH, 'w') as w:
+        w.write("USERNAME=%s\n" % username)
+        w.write("PASSWORD=%s\n" % password)
+
+def get_settings_from_init_file():
+    """
+    Create settings dictionary mapping attribute -> value. Contains, e.g.,
+    username and password.
+
+    The attributes are a list of constants at the top of the file, e.g.,
+    `USERNAME` and `PASSWORD`.
+    @return Settings dictionary.
+    """
+    # settings dict contains dummy entrys for *every* possible setting
+    settings = {
+          USERNAME: ''
+        , PASSWORD: ''
+    }
+
+    # create config file with username/password if it doesn't exist
+    if not os.path.exists(constants.CONFIG_FILE_PATH):
+        initialize_user()
+
+    # open config file, populate settings dictionary with fields we find
+    with open(constants.CONFIG_FILE_PATH) as f:
+        for line in f.readlines():
+            split_line = line.split("=")
+            if len(split_line) != 2:
+                raise Exception("\033[1;31mMalformed line in config file %s\033[0m" \
+                                % line)
+            field = split_line[0].strip()
+            value = split_line[1].strip()
+
+            # validate that dummy entry exists; if it doesn't, then it's
+            # not a valid setting
+            if field in settings:
+                settings[field] = value
+            else:
+                raise Exception(
+                        "\033[1;31mUnknown setting in config file %s\033[0m" \
+                        % constants.CONFIG_FILE_PATH)
+        if settings[USERNAME] == '' or settings[PASSWORD] == '':
+            print "\033[1;31mUsername or password missing from config file %s\033[0m" \
+                    % constants.CONFIG_FILE_PATH
+
+    return settings
 
 
 def create_dir_if_not_exists(directory):
+    """
+    Simple utility function creates a directory if it doesn't exist.
+    """
     if not os.path.exists(directory):
         os.makedirs(directory)
 
 def cli(arguments):
+    """
+    Processes command line args for Snapchat FS
+    @arguments Arguments dictionary obtained from docopt the library.
+    """
     if arguments['list']:
-        list_all_downloadable_sfs_files(USERNAME, PASSWORD)
+        list_all_downloadable_sfs_files(SETTINGS[USERNAME]
+                                        , SETTINGS[PASSWORD])
     if arguments['download'] and arguments['all']:
         directory = arguments['<target_directory>']
         create_dir_if_not_exists(directory)
-        download_all_sfs(USERNAME, PASSWORD, directory)
+        download_all_sfs(SETTINGS[USERNAME], SETTINGS[PASSWORD], directory)
     if arguments['upload']:
         for filename in arguments['<file>']:
-            upload_sfs_file(USERNAME, PASSWORD, filename)
+            upload_sfs_file(SETTINGS[USERNAME], SETTINGS[PASSWORD], filename)
 
 def main():
-    if USERNAME == None or PASSWORD == None:
-        print 'Before using Snapchat FS, you must fill in the USERNAME and ' + \
-                'PASSWORD variables in the `sfs` file!'
-        sys.exit(1)
-    else:
-        arguments = docopt(__doc__, version=constants.VERSION)
-        cli(arguments)
+    global SETTINGS
+    SETTINGS = get_settings_from_init_file()
+    arguments = docopt(__doc__, version=constants.VERSION)
+    cli(arguments)
 
 if __name__ == '__main__':
     main()

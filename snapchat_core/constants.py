@@ -1,4 +1,7 @@
+import os
+
 VERSION = 'Snapchat FS 0.1'
+CONFIG_FILE_PATH = os.getenv("HOME") + '/.snapchat_fs'
 
 ROOT_URL = "https://feelinsonice-hrd.appspot.com"
 # appened to the ROOT_URL to get the login resource
@@ -11,7 +14,7 @@ BLOB_RESOURCE = "/bq/blob"
 # to be able to log in
 LOGIN_TOKEN = "m198sOkJEn37DjqZ32lpRu76xmw288xSQ9"
 
-# secret key is used for things like encrypting the images
+# secret key hardcoded into app; is used for things like encrypting the images
 SECRET_KEY = "M02cnQ51Ji97vwT4"
 # the secret salt they use for the hashes they use to generate req tokens
 SALT = "iEk21fuwZApXlz93750dmW22pw389dPwOk"
