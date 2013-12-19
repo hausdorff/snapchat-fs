@@ -28,9 +28,18 @@ __email__ = "clemmer.alexander@gmail.com"
 __status__ = "Prototype"
 
 
-SETTINGS = {}
+# SETTINGS CONSTANTS -- possible settings found in config file ~/.snapchat_fs
 USERNAME = 'USERNAME'
 PASSWORD = 'PASSWORD'
+
+# SETTINGS DICTIONARY -- stores defaults found in ~/.snapchat_fs
+#     contains dummy entries for every possible setting so that we can
+#     validate whether a setting found in config file is valid based on
+#     whether it appears in this dictionary
+SETTINGS = {
+      USERNAME: ""
+    , PASSWORD: ""
+}
 
 
 def initialize_user():
@@ -58,7 +67,7 @@ def initialize_user():
         w.write("USERNAME=%s\n" % username)
         w.write("PASSWORD=%s\n" % password)
 
-def get_settings_from_init_file():
+def init_settings_from_config_file():
     """
     Create settings dictionary mapping attribute -> value. Contains, e.g.,
     username and password.
@@ -67,12 +76,6 @@ def get_settings_from_init_file():
     `USERNAME` and `PASSWORD`.
     @return Settings dictionary.
     """
-    # settings dict contains dummy entrys for *every* possible setting
-    settings = {
-          USERNAME: ''
-        , PASSWORD: ''
-    }
-
     # create config file with username/password if it doesn't exist
     if not os.path.exists(constants.CONFIG_FILE_PATH):
         initialize_user()
@@ -89,17 +92,17 @@ def get_settings_from_init_file():
 
             # validate that dummy entry exists; if it doesn't, then it's
             # not a valid setting
-            if field in settings:
-                settings[field] = value
+            if field in SETTINGS:
+                SETTINGS[field] = value
             else:
                 raise Exception(
                         "\033[1;31mUnknown setting in config file %s\033[0m" \
                         % constants.CONFIG_FILE_PATH)
-        if settings[USERNAME] == '' or settings[PASSWORD] == '':
+        if SETTINGS[USERNAME] == '' or SETTINGS[PASSWORD] == '':
             print "\033[1;31mUsername or password missing from config file %s\033[0m" \
                     % constants.CONFIG_FILE_PATH
 
-    return settings
+    return SETTINGS
 
 
 def create_dir_if_not_exists(directory):
@@ -127,7 +130,7 @@ def cli(arguments):
 
 def main():
     global SETTINGS
-    SETTINGS = get_settings_from_init_file()
+    init_settings_from_config_file()
     arguments = docopt(__doc__, version=constants.VERSION)
     cli(arguments)
 
