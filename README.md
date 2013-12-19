@@ -72,7 +72,7 @@ To add more to this config file, all you need to do is follow that format. Curre
 
 # Installation
 
-Currently you will have to install it yourself. The file `sfs` in the root directory is a Python script, and you can run it as `./sfs`.
+The `sfs` file is a Python script that currently sits in the root directory and never moves, because there's no installation script. You can run it with a command like `./sfs`. If you want to move into `bin/` or something, you'll have to do it yourself.
 
 Someday this will be `pip`-installable or something.
 
