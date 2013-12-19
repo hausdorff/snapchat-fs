@@ -70,6 +70,13 @@ PASSWORD=iheartsnapchat
 To add more to this config file, all you need to do is follow that format. Currently `sfs` is feature-sparse, so the only settings only include `USERNAME` and `PASSWORD`, but eventually it will allow you to do things like specify the encryption protocol to use when encrypting your data and sending it to the Snapchat servers.
 
 
+# Installation
+
+Currently you will have to install it yourself. The file `sfs` in the root directory is a Python script, and you can run it as `./sfs`.
+
+Someday this will be `pip`-installable or something.
+
+
 # Authors
 
 | Author        | GitHub username                                | Personal Site | Contribution |
