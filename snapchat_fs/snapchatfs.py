@@ -22,8 +22,13 @@ __status__ = "Prototype"
 
 def sent_id_to_received_id(id):
     """
+    Transforms a sent_id to a received_id.
+    
     Sent IDs have an 's' at the end, while received IDs have an 'r' on the
     end. This method strips 's' off and replaces it with an 'r'.
+
+    @id Id to transform.
+    @return Transformed id.
     """
     return id[:-1] + 'r'
 
