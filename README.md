@@ -46,7 +46,9 @@ cow.mov       1a55ff534e03d25b5...31f
 
 # Configuration
 
-`sfs` will boot up and look for the file `~/.snapchat_fs`, which is a config file that we will use to store things like username and password. If it doesn't find the file, it will prompt you for your username and password. This looks something like so:
+`sfs` will boot up and look for the file `~/.snapchat_fs`, which is a config file that we will use to store things like username and password. If it doesn't find the file, it will prompt you for your username and password. After you enter these things, it will create the config file and populate it with this information (NOTE: password is in PLAINTEXT).
+
+This looks something like so:
 
 ```
 Looks like you haven't used Snapchat FS before.
