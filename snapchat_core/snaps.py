@@ -8,6 +8,7 @@ that are useful to perform on snaps.
 
 import time
 from Crypto.Cipher import AES
+import constants
 
 __author__ = "Alex Clemmer, Chad Brubaker"
 __copyright__ = "Copyright 2013, Alex Clemmer and Chad Brubaker"
@@ -34,8 +35,6 @@ class Caption():
                        snap['cap_pos'],
                        snap['cap_ori'])
 class Snap():
-    encryption_key = "M02cnQ51Ji97vwT4"
-
     class Type():
         """
         The media type of Snap
