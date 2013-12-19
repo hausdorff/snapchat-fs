@@ -35,6 +35,30 @@ cow.mov       1a55ff534e03d25b5...31f
 ```
 
 
+# Configuration
+
+`sfs` will boot up and look for the file `~/.snapchat_fs`, which is a config file that we will use to store things like username and password. If it doesn't find the file, it will prompt you for your username and password. This looks something like so:
+
+```
+Looks like you haven't used Snapchat FS before.
+We're going to ask for a username and a password; you can
+change these later by messing with the file /Users/alex/.snapchat_fs
+Please enter a username:
+bobby_murphy
+Please enter your password (NOTE: STORED IN PLAINTEXT):
+
+```
+
+The `sfs` config file looks something like this:
+
+```
+USERNAME=bobby_murphy
+PASSWORD=iheartsnapchat
+```
+
+To add more to this config file, all you need to do is follow that format. Currently `sfs` is feature-sparse, so the only settings only include `USERNAME` and `PASSWORD`, but eventually it will allow you to do things like specify the encryption protocol to use when encrypting your data and sending it to the Snapchat servers.
+
+
 # Features
 
 * [x] Uploading files via command line
@@ -43,6 +67,7 @@ cow.mov       1a55ff534e03d25b5...31f
 * [ ] Deleting files from Snapchat's server using the command line (to delete it you must "view" it in the app)
 * [ ] Encrypting data with something other than the Snapchat default
 * [ ] FUSE integration (yes yes I know I know)
+
 
 # Authors
 
