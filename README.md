@@ -37,8 +37,10 @@ cow.mov       1a55ff534e03d25b5...31f
 
 # Authors
 
-* Chad Brubaker [@pencilo](https://github.com/pencilo) wrote much of `snapchat_core`. See [original pysnapchat](https://github.com/pencilo/pysnapchat) repot.
-* Alex Clemmer [@hausdorff](https://github.com/hausdorff/) wrote everything else.
+| Author        | GitHub username                            | Contribution |
+|:--------------|-------------------------------------------:|:------------:|
+| Chad Brubaker | [@pencilo](https://github.com/pencilo)     | wrote some of `snapchat_core`. See his [pysnapchat](https://github.com/pencilo/pysnapchat) repot for a very similar implementation. (All work used with permission.)
+| Alex Clemmer  | [@hausdorff](https://github.com/hausdorff/)| wrote everything else. |
 
 
 # LICENSE
