@@ -1,3 +1,14 @@
+# Table of contents
+
+
+|   | Section        |
+|:--|:---------------|
+| 1 | [Introduction](https://github.com/hausdorff/snapchat-fs#introduction) |
+| 2 | [Features](https://github.com/hausdorff/snapchat-fs#features)  |
+| 3 | [Configuration](https://github.com/hausdorff/snapchat-fs#configuration)  |
+| 4 | [Authors](https://github.com/hausdorff/snapchat-fs#authors) |
+| 5 | [LICENSE](https://github.com/hausdorff/snapchat-fs#license) |
+
 
 # Introduction
 
@@ -33,18 +44,6 @@ Filename      Content hash
 some_file.pdf fc7f9f7fd935c8f34...7df
 cow.mov       1a55ff534e03d25b5...31f
 ```
-
-
-# Table of contents
-
-
-|   | Section        |
-|:--|:---------------|
-| 1 | [Introduction](https://github.com/hausdorff/snapchat-fs#introduction) |
-| 2 | [Features](https://github.com/hausdorff/snapchat-fs#features)  |
-| 3 | [Configuration](https://github.com/hausdorff/snapchat-fs#configuration)  |
-| 4 | [Authors](https://github.com/hausdorff/snapchat-fs#authors) |
-| 5 | [LICENSE](https://github.com/hausdorff/snapchat-fs#license) |
 
 
 # Features
