@@ -40,7 +40,7 @@ cow.mov       1a55ff534e03d25b5...31f
 * [x] Uploading files via command line
 * [x] Downloading all the files all at once to an arbitrary file
 * [ ] Downloading one file at a time
-* [ ] Deleting files from Snapchat's server
+* [ ] Deleting files from Snapchat's server using the command line (to delete it you must "view" it in the app)
 * [ ] Encrypting data with something other than the Snapchat default
 * [ ] FUSE integration (yes yes I know I know)
 
