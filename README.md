@@ -1,15 +1,3 @@
-# Table of contents
-
-
-|   | Section        |
-|:--|:---------------|
-| 1 | [Introduction](https://github.com/hausdorff/snapchat-fs#introduction) |
-| 2 | [Features](https://github.com/hausdorff/snapchat-fs#features)  |
-| 3 | [Configuration](https://github.com/hausdorff/snapchat-fs#configuration)  |
-| 4 | [Authors](https://github.com/hausdorff/snapchat-fs#authors) |
-| 5 | [LICENSE](https://github.com/hausdorff/snapchat-fs#license) |
-
-
 # Introduction
 
 Since Snapchat imposes few restrictions on what data can be uploaded (i.e.,
