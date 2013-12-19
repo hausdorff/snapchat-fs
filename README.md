@@ -24,7 +24,7 @@ Downloading snap file.txt
 Downloading snap file.txt but filename is not unique; downloading as: file.txt-1a55ff534e03d25b5a489da83c2ae32ad9bc70fc6e07df4e7b0e82f028cb531f
 ```
 
-Snapchat FS supports many other features, such as listing the files
+Snapchat FS supports some other features, such as listing the files
 currently maintained in Snapchat using the Snapchat FS utility:
 
 ```
@@ -34,6 +34,15 @@ some_file.pdf fc7f9f7fd935c8f34...7df
 cow.mov       1a55ff534e03d25b5...31f
 ```
 
+
+# Features
+
+* [x] Uploading files via command line
+* [x] Downloading all the files all at once to an arbitrary file
+* [ ] Downloading one file at a time
+* [ ] Deleting files from Snapchat's server
+* [ ] Encrypting data with something other than the Snapchat default
+* [ ] FUSE integration (yes yes I know I know)
 
 # Authors
 
