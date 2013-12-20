@@ -85,12 +85,16 @@ class SnapchatSession():
         self.login_data = result
         self._update_session_state(result)
 
-    def upload_image(self, image_data, media_id):
+    def upload_image(self, filename, media_id):
         """
         Uploads an image to Snapchat.
         @filename Name of the image to upload.
         @media_id The ID to give the image we upload.
         """
+
+        with open(filename) as f:
+            image_data = f.read()
+
         # generate request parameters
         encrypted_data = SnapchatSession._snapchat_basic_encrypt(
             image_data)
