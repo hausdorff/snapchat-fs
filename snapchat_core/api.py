@@ -92,7 +92,7 @@ class SnapchatSession():
     def upload_image(self, image_data, media_id):
         """
         Uploads an image to Snapchat.
-        @filename Name of the image to upload.
+        @image_data Image data to upload
         @media_id The ID to give the image we upload.
         """
         # generate request parameters
