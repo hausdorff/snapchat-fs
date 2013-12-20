@@ -80,6 +80,10 @@ class SnapchatSession():
         result = SnapchatSession._post_or_fail(constants.LOGIN_RESOURCE
                                     , req_params).json()
 
+        # make sure login was successful
+        if result['logged'] == False:
+            raise Exception("Login failed, invalid credentials")
+
         # update session state with login response information
         self.session_token = result[AUTH_TOKEN]
         self.login_data = result

@@ -14,7 +14,7 @@ Options:
 """
 from docopt import docopt
 import os, getpass, sys
-from snapchat_core import constants
+from snapchat_core import constants, SfsSession
 from snapchat_fs import *
 
 __author__ = "Alex Clemmer, Chad Brubaker"
@@ -62,10 +62,14 @@ def initialize_user():
     print "Please enter your password (NOTE: STORED IN PLAINTEXT):"
     password = getpass.getpass('')
 
+    # Try logging in first before we continue
+    ss = SfsSession(username, password)
+    ss.login()
     # write username/password to file
     with open(constants.CONFIG_FILE_PATH, 'w') as w:
         w.write("USERNAME=%s\n" % username)
         w.write("PASSWORD=%s\n" % password)
+
 
 def init_settings_from_config_file():
     """
@@ -78,6 +82,7 @@ def init_settings_from_config_file():
     """
     # create config file with username/password if it doesn't exist
     if not os.path.exists(constants.CONFIG_FILE_PATH):
+        # can fail and raise a login exception, caught by main()
         initialize_user()
 
     # open config file, populate settings dictionary with fields we find
@@ -130,9 +135,13 @@ def cli(arguments):
 
 def main():
     global SETTINGS
-    init_settings_from_config_file()
-    arguments = docopt(__doc__, version=constants.VERSION)
-    cli(arguments)
+    try:
+        init_settings_from_config_file()
+        arguments = docopt(__doc__, version=constants.VERSION)
+        cli(arguments)
+    except Exception as e:
+        print e
+        exit()
 
 if __name__ == '__main__':
     main()
