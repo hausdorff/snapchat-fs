@@ -50,7 +50,6 @@ def download_all_sfs(username, password, target_dir):
         try:
             data = snap.download()
             if filename not in filenames_downloaded:
-                
                 print(util.green("Downloading snap ") + "%s" % filename)
                 path = os.path.join(target_dir, filename)
             else:
@@ -139,9 +138,13 @@ def upload_sfs_file(username, password, filename):
     @password Password of user.
     @filename Path of the file to upload.
     """
-    print util.green('Uploading file ') + (filename)
+    with open(filename) as f:
+        data = f.read()
+
+    basename = os.path.basename(filename)
+    print util.green('Uploading file ') + (basename)
     ss = SfsSession(username, password)
     ss.login()
-    sfs_id = ss.generate_sfs_id(filename)
-    ss.upload_image(filename, sfs_id)
+    sfs_id = ss.generate_sfs_id(basename, data)
+    ss.upload_image(data, sfs_id)
     ss.send_image_to(username, sfs_id)
