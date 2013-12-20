@@ -65,7 +65,6 @@ def initialize_user():
     # Try logging in first before we continue
     ss = SfsSession(username, password)
     ss.login()
-
     # write username/password to file
     with open(constants.CONFIG_FILE_PATH, 'w') as w:
         w.write("USERNAME=%s\n" % username)
