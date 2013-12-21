@@ -5,8 +5,9 @@ snapchatfs.py provides a clean CLI for uploading, storing, managing, and
 downloading arbitrary data files from Snapchat.
 """
 
+from __future__ import absolute_import
 import hashlib, os
-import util
+import snapchat_fs.util as util
 from snapchat_core import *
 
 __author__ = "Alex Clemmer, Chad Brubaker"
@@ -32,16 +33,41 @@ def sent_id_to_received_id(id):
     """
     return id[:-1] + 'r'
 
-def download_all_sfs(username, password, target_dir):
+def download_all_sfs(session, target_dir):
     """
     Downloads all files managed by Snapchat FS, writing them to `target_dir`
     
-    @username Username that owns the files.
-    @password Password for the account specified by `username`
+    @session An SfsSession object that has been logged in.
     @target_dir Where to download the files to.
     """
+    files = all_downloadable_sfs_files(session)
+    download_from_sfs(target_dir, files)
+
+def download_by_id(session, target_dir, snap_ids):
+    """
+    Downloads files managed by Snapchat FS with specified ids,
+    writing them to `target_dir`
+    
+    @session An SfsSession object that has been logged in.
+    @target_dir Where to download the files to.
+    @snap_ids The ids of the snaps to download
+    """
+    def should_download_file(f):
+        (_, _, _, snap) = f
+        return snap.id in snap_ids
+
     # get all downloadable files tracked by Snapchat FS
-    files = all_downloadable_sfs_files(username, password)
+    available_files = all_downloadable_sfs_files(session)
+    files_to_download = filter(should_download_file, available_files)
+    download_from_sfs(target_dir, files_to_download)
+
+def download_from_sfs(target_dir, files):
+    """
+    Downloads snaps given a list of Snap objects, writing them to `target_dir`
+
+    @target_dir Where to download the files to.
+    @files The list of (filename, content_hash, recv_id, snap) tuples to download
+    """
 
     # download each file in sequence; if we find two files with the same
     # name, we give the file a name that includes a hash of the contents
@@ -69,27 +95,24 @@ def download_all_sfs(username, password, target_dir):
             print("Failed to download %s: %s" % (filename, e))
             raise
 
-def all_downloadable_sfs_files(username, password):
+def all_downloadable_sfs_files(session):
     """
     Gets all files managed in Snapchat FS for a specific user; returns
     them as a list of Snap objects, whose IDs can be used to download
     all or some of the files from Snapchat's DB.
     
-    @username User who owns the files.
-    @password Password for the user.
+    @session An SfsSession object that has been logged in.
     @return List of Snap objects representing the files.
     """
-    ss = SfsSession(username, password)
-    ss.login()
 
     # get list of downloadable ids
-    downloadable_snaps = ss.get_snaps(lambda snap: snap.viewable)
+    downloadable_snaps = session.get_snaps(lambda snap: snap.viewable)
     downloadable_snaps_dict = {snap.id: snap
                               for snap in downloadable_snaps}
 
     # get list of snaps sent
-    snaps_sent = ss.get_snaps(lambda snap: isinstance(snap, SentSnap)
-                              and SfsSession.is_sfs_id(snap.client_id))
+    snaps_sent = session.get_snaps(lambda snap: isinstance(snap, SentSnap)
+                                   and SfsSession.is_sfs_id(snap.client_id))
 
     # for deduping -- a file is a duplicate if its content and its name
     # are the same
@@ -99,7 +122,7 @@ def all_downloadable_sfs_files(username, password):
     # grab all "unique" files stored in Snapchat FS
     sfs_files = []
     for snap in snaps_sent:
-        filename, content_hash = ss.parse_sfs_id(snap.client_id)
+        filename, content_hash = session.parse_sfs_id(snap.client_id)
         received_id = sent_id_to_received_id(snap.id)
 
         if (filename in filenames_seen_so_far) \
@@ -114,33 +137,29 @@ def all_downloadable_sfs_files(username, password):
 
     return sfs_files
 
-def list_all_downloadable_sfs_files(username, password):
+def list_all_downloadable_sfs_files(session):
     """
     Produces a list of Snap objects representing all downloadable files
     managed by Snapchat FS for a particular user.
     
-    @username User who owns the files.
-    @password Password for user.
+    @session An SfsSession object that has been logged in.
     @return List of Snap objects representing all downloadable files in SFS.
     """
-    files = all_downloadable_sfs_files(username, password)
+    files = all_downloadable_sfs_files(session)
 
-    print '\t'.join([util.bold('Filename'), util.bold('Content hash')])
+    print '\t'.join([util.bold('Filename'), util.bold('Content hash'), util.bold('Snap ID')])
     for filename, content_hash, received_id, snap in files:
-        print '%s\t%s...%s' % (filename, content_hash[:17]
-                               , content_hash[-3:])
+        print '%s\t%s...%s\t%s' % (filename, content_hash[:17]
+                               , content_hash[-3:], snap.id)
 
-def upload_sfs_file(username, password, filename):
+def upload_sfs_file(session, filename):
     """
     Uploads a file to Snapchat FS.
 
-    @username User who will own the file in Snapchat FS.
-    @password Password of user.
+    @session An SfsSession object that has been logged in.
     @filename Path of the file to upload.
     """
     print util.green('Uploading file ') + (filename)
-    ss = SfsSession(username, password)
-    ss.login()
-    sfs_id = ss.generate_sfs_id(filename)
-    ss.upload_image(filename, sfs_id)
-    ss.send_image_to(username, sfs_id)
+    sfs_id = session.generate_sfs_id(filename)
+    session.upload_image(filename, sfs_id)
+    session.send_image_to(session.username, sfs_id)
