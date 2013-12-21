@@ -68,7 +68,9 @@ def initialize_user():
     ss.login()
     # write username/password to file
     with open(constants.CONFIG_FILE_PATH, 'w') as w:
-        w.write("USERNAME=%s\n" % username)
+        # Store the username in lowercase for consistency.
+        # Snapchat is case-insensitive with both usernames and emails.
+        w.write("USERNAME=%s\n" % username.lower())
         w.write("PASSWORD=%s\n" % password)
 
 
