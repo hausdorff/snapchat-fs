@@ -50,11 +50,10 @@ def download_all_sfs(username, password, target_dir):
         try:
             data = snap.download()
             if filename not in filenames_downloaded:
-                
-                print(util.green("Downloading snap ") + "%s" % filename)
+                print(util.green("Downloading snap ") + filename)
                 path = os.path.join(target_dir, filename)
             else:
-                print(util.green("Downloading snap ") + ("%s " % filename) +
+                print(util.green("Downloading snap ") + filename +
                       (util.red("but filename is not unique; ") +
                        ("downloading as: %s" %
                         (filename + "-" + content_hash))))
