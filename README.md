@@ -74,6 +74,8 @@ To add more to this config file, all you need to do is follow that format. Curre
 
 The `sfs` file is a Python script that currently sits in the root directory and never moves, because there's no installation script. You can run it with a command like `./sfs`. If you want to move into `bin/` or something, you'll have to do it yourself.
 
+In order to install dependencies: ``pip install -r requirements.txt``
+
 Someday this will be `pip`-installable or something.
 
 
