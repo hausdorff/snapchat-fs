@@ -1,0 +1,5 @@
+docopt>=0.6.1
+pyasn1>=0.1.7
+pycrypto>=2.6.1
+requests>=2.1.0
+rsa>=3.1.2
