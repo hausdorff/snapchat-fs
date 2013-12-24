@@ -1,3 +1,5 @@
+MAINTAINER'S NOTE: Snapchat has changed their API and as of 12/24/2013 this is not quite functional. Working on it!
+
 # Introduction
 
 Since Snapchat imposes few restrictions on what data can be uploaded (i.e.,
