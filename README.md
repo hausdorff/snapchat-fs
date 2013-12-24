@@ -74,6 +74,8 @@ To add more to this config file, all you need to do is follow that format. Curre
 
 The `sfs` file is a Python script that currently sits in the root directory and never moves, because there's no installation script. You can run it with a command like `./sfs`. If you want to move into `bin/` or something, you'll have to do it yourself.
 
+In order to install dependencies: ``pip install -r requirements.txt``
+
 Someday this will be `pip`-installable or something.
 
 
@@ -83,6 +85,8 @@ Someday this will be `pip`-installable or something.
 |:--------------|:----------------------------------------------:|:-------------|:-------------|
 | **Chad Brubaker** | [@pencilo](https://github.com/pencilo)     | -            | wrote some of `snapchat_core`. See his [pysnapchat](https://github.com/pencilo/pysnapchat) repot for a very similar implementation. (All work used with permission.)
 | **Alex Clemmer**  | [@hausdorff](https://github.com/hausdorff/)| [nullspace](http://blog.nullspace.io/) | wrote everything else. |
+| **Michael Rosenberg**  | [@doomrobo](https://github.com/doomrobo)| - | bug fixes, better login mechanisms |
+| -  | [@anshukla](https://github.com/anshukla)| - | added `requirements.txt` |
 
 
 # LICENSE
@@ -92,7 +96,7 @@ Distributed under MIT, which basically means that if you should use this code fo
 
 ## MIT License
 
-Copyright (C) Alex Clemmer (@hausdorff) and Chad Brubaker (@pencilo)
+Copyright (C) [Alex Clemmer](http://nullspace.io/) ([@hausdorff](https://github.com/hausdorff)) and Chad Brubaker ([@pencilo](https://github.com/pencilo))
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

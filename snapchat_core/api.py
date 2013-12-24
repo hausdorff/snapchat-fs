@@ -89,16 +89,12 @@ class SnapchatSession():
         self.login_data = result
         self._update_session_state(result)
 
-    def upload_image(self, filename, media_id):
+    def upload_image(self, image_data, media_id):
         """
         Uploads an image to Snapchat.
-        @filename Name of the image to upload.
+        @image_data Image data to upload
         @media_id The ID to give the image we upload.
         """
-
-        with open(filename) as f:
-            image_data = f.read()
-
         # generate request parameters
         encrypted_data = SnapchatSession._snapchat_basic_encrypt(
             image_data)
@@ -288,41 +284,39 @@ class SnapchatSession():
 
 class SfsSession(SnapchatSession):
     @staticmethod
-    def generate_sfs_id(filename):
+    def generate_sfs_id(basename, file_data):
         """
-	Produces an ID for a file stored in Snapchat FS. ID consists of a
+        Produces an ID for a file stored in Snapchat FS. ID consists of a
         prefix, the
-	filename, and a unique identifier based on file data.
-	@filename Name of the file as it exists on the filesystem.
-	@file_data The data inside the file.
-	"""
-        with open(filename) as f:
-            file_data = f.read()
-	sha = hashlib.sha256()
-	sha.update(file_data)
-	content_id = sha.hexdigest()
-	return "snapchatfs-%s-%s" % (filename, content_id)
+        filename, and a unique identifier based on file data.
+        @filename Name of the file as it exists on the filesystem.
+        @file_data The data inside the file.
+        """
+        sha = hashlib.sha256()
+        sha.update(file_data)
+        content_id = sha.hexdigest()
+        return "snapchatfs-%s-%s" % (basename, content_id)
 
     @staticmethod
     def is_sfs_id(id):
-	"""
-	Returns True if `id` is a valid Snapchat FS file identifier.
-	@id The identifier to test.
-	"""
-	return id.startswith('snapchatfs-')
+        """
+        Returns True if `id` is a valid Snapchat FS file identifier.
+        @id The identifier to test.
+        """
+        return id.startswith('snapchatfs-')
 
     def parse_sfs_id(self, id):
-	"""
-	Parses an identifier for a file in Snapchat FS. Returns the
+        """
+        Parses an identifier for a file in Snapchat FS. Returns the
         filename and a hash of
-	the contents of the file.
-	@id The Snapchat FS identifier to parse.
-	"""
-	assert(SfsSession.is_sfs_id(id))
-	# valid ids are of the form
+        the contents of the file.
+        @id The Snapchat FS identifier to parse.
+        """
+        assert(SfsSession.is_sfs_id(id))
+        # valid ids are of the form
         # """snapchat-[filename]-[hash of content][username]"""
-	prefix = id[:11]                     # 'snapchat-'
-	filename = id[11:-76]                # filename
-	content_id = id[-75:-len(self.username)]  # hash of content
-	return filename, content_id
+        prefix = id[:11]                     # 'snapchat-'
+        filename = id[11:-76]                # filename
+        content_id = id[-75:-len(self.username)]  # hash of content
+        return filename, content_id
 

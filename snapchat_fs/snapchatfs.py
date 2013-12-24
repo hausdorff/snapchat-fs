@@ -159,7 +159,11 @@ def upload_sfs_file(session, filename):
     @session An SfsSession object that has been logged in.
     @filename Path of the file to upload.
     """
-    print util.green('Uploading file ') + (filename)
-    sfs_id = session.generate_sfs_id(filename)
-    session.upload_image(filename, sfs_id)
-    session.send_image_to(session.username, sfs_id)
+    with open(filename) as f:
+        data = f.read()
+
+    basename = os.path.basename(filename)
+    print util.green('Uploading file ') + (basename)
+    sfs_id = session.generate_sfs_id(basename, data)
+    session.upload_image(data, sfs_id)
+    session.send_image_to(username, sfs_id)
