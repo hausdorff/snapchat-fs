@@ -85,7 +85,7 @@ Someday this will be `pip`-installable or something.
 |:--------------|:----------------------------------------------:|:-------------|:-------------|
 | **Chad Brubaker** | [@pencilo](https://github.com/pencilo)     | -            | wrote some of `snapchat_core`. See his [pysnapchat](https://github.com/pencilo/pysnapchat) repot for a very similar implementation. (All work used with permission.)
 | **Alex Clemmer**  | [@hausdorff](https://github.com/hausdorff/)| [nullspace](http://blog.nullspace.io/) | wrote everything else. |
-| **Michael Rosenberg**  | [@doomrobo](https://github.com/doomrobo)| - | bug fixes, better login mechanisms |
+| **Michael Rosenberg**  | [@doomrobo](https://github.com/doomrobo)| - | bug fixes, better login mechanisms, single-file download |
 | -  | [@anshukla](https://github.com/anshukla)| - | added `requirements.txt` |
 
 
