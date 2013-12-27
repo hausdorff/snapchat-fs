@@ -166,4 +166,4 @@ def upload_sfs_file(session, filename):
     print util.green('Uploading file ') + (basename)
     sfs_id = session.generate_sfs_id(basename, data)
     session.upload_image(data, sfs_id)
-    session.send_image_to(username, sfs_id)
+    session.send_image_to(session.username, sfs_id)

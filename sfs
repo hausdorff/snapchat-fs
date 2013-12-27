@@ -73,7 +73,6 @@ def initialize_user():
         w.write("USERNAME=%s\n" % username.lower())
         w.write("PASSWORD=%s\n" % password)
 
-
 def init_settings_from_config_file():
     """
     Create settings dictionary mapping attribute -> value. Contains, e.g.,
@@ -112,7 +111,6 @@ def init_settings_from_config_file():
 
     return SETTINGS
 
-
 def create_dir_if_not_exists(directory):
     """
     Simple utility function creates a directory if it doesn't exist.
@@ -149,6 +147,7 @@ def main():
         arguments = docopt(__doc__, version=constants.VERSION)
         cli(arguments)
     except Exception as e:
+        print util.red("Error:"),
         print e
         exit()
 
