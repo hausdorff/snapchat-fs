@@ -3,7 +3,8 @@
 
 Usage:
   sfs list
-  sfs download all <target_directory>
+  sfs download_all <target_directory>
+  sfs download <target_directory> <snap_id> ...
   sfs upload <file> ...
   sfs (-h | --help)
   sfs (-v | --version)
@@ -67,7 +68,9 @@ def initialize_user():
     ss.login()
     # write username/password to file
     with open(constants.CONFIG_FILE_PATH, 'w') as w:
-        w.write("USERNAME=%s\n" % username)
+        # Store the username in lowercase for consistency.
+        # Snapchat is case-insensitive with both usernames and emails.
+        w.write("USERNAME=%s\n" % username.lower())
         w.write("PASSWORD=%s\n" % password)
 
 
@@ -122,16 +125,22 @@ def cli(arguments):
     Processes command line args for Snapchat FS
     @arguments Arguments dictionary obtained from docopt the library.
     """
+    session = SfsSession(SETTINGS[USERNAME], SETTINGS[PASSWORD])
+    session.login()
     if arguments['list']:
-        list_all_downloadable_sfs_files(SETTINGS[USERNAME]
-                                        , SETTINGS[PASSWORD])
-    if arguments['download'] and arguments['all']:
+        list_all_downloadable_sfs_files(session)
+    if arguments['download_all']:
         directory = arguments['<target_directory>']
         create_dir_if_not_exists(directory)
-        download_all_sfs(SETTINGS[USERNAME], SETTINGS[PASSWORD], directory)
+        download_all_sfs(session, directory)
+    if arguments['download']:
+        directory = arguments['<target_directory>']
+        snap_ids = arguments['<snap_id>']
+        create_dir_if_not_exists(directory)
+        download_by_id(session, directory, snap_ids)
     if arguments['upload']:
         for filename in arguments['<file>']:
-            upload_sfs_file(SETTINGS[USERNAME], SETTINGS[PASSWORD], filename)
+            upload_sfs_file(session, filename)
 
 def main():
     global SETTINGS
